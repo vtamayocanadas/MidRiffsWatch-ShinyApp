@@ -18,7 +18,8 @@ ui <- fluidPage(
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
-            sliderInput("bins",
+            sliderInput(label = "Choose the year of implementation of the Marine Reserves",
+                        "bins",
                         "Number of bins:",
                         min = 1,
                         max = 50,
