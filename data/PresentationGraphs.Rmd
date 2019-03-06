@@ -1,0 +1,246 @@
+---
+title: "Presentation Graphs"
+author: "Seleni Cruz"
+date: "January 16, 2019"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE, message=FALSE, echo=FALSE}
+library(dplyr)
+library(here)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+library(RColorBrewer)
+```
+
+
+```{r, echo=FALSE, message=FALSE, fig.width=8, fig.height=12}
+Genus_patchmodel <- read.csv(here::here("data", "merged_2D_output0.3.csv"))%>%
+  filter(Adjusted=="MT")
+
+fishing <-ggplot(Genus_patchmodel, aes(x=Year, y=Fishing_est, color=Status))+
+  geom_line()+
+  labs(x="Year", y="Fishing effort", title="Fishing effort")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))
+
+fishing<- fishing+
+   facet_wrap(~ Name, scales = "free_y", ncol=2)
+ggplotly(fishing)
+
+
+Biomass <-ggplot(Genus_patchmodel, aes(x=Year, y=Biomass_est, color= Status))+
+  geom_line()+
+  labs(x="Year", y="Biomass (MT)", title="Biomass")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))
+
+Biomass<- Biomass+
+   facet_wrap(~ Name, scales = "free_y", ncol=2)
+ggplotly(Biomass)
+
+catch <-ggplot(Genus_patchmodel, aes(x=Year, y=Catch_est, color= Status))+
+  geom_line()+
+  labs(x="Year", y="Catch (MT)", title="Catch")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))
+
+catch<- catch+
+   facet_wrap(~ Name, scales = "free_y", ncol=2)
+ggplotly(catch)
+
+```
+
+
+
+```{r, include=FALSE, message=FALSE, echo= FALSE}
+Genus_patchmodel <- read.csv(here::here("data", "merged_2D_output0.3.csv"))%>%
+  filter(Adjusted=="MT")
+#Genus_patchmodel[is.na(Genus_patchmodel)] <- 0
+cummulative<- Genus_patchmodel%>%
+  group_by(Status, Adjusted, Year)%>%
+  summarize(Biomass_est=sum(Biomass_est), 
+            Biomass_lo=sum(Biomass_lo), 
+            Biomass_hi=sum(Biomass_hi), 
+            Catch_est=sum(Catch_est),
+            Catch_lo=sum(Catch_lo), 
+            Catch_hi=sum(Catch_hi))
+
+
+Totals<- Genus_patchmodel%>%
+  group_by(Status, Adjusted)%>%
+  summarize(Biomass_est=sum(Biomass_est), 
+            Biomass_lo=sum(Biomass_lo), 
+            Biomass_hi=sum(Biomass_hi), 
+            Catch_est=sum(Catch_est),
+            Catch_lo=sum(Catch_lo), 
+            Catch_hi=sum(Catch_hi))
+         
+```
+
+```{r, echo=FALSE, message=FALSE}
+
+biomass<- ggplot(cummulative, aes(x=Year, y=Biomass_est, color=Status))+
+  geom_line(size=1)+
+  labs(x="Year", y="Biomass (metric tons)", title="Cummulative Biomass")+
+  #scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
+  theme_classic()+
+   theme(axis.title.y = element_text(vjust=3))+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+biomass<- biomass+
+   facet_wrap(~ Adjusted, scales = "free_y", ncol=2)
+  
+ggplotly(biomass)
+
+catch<- ggplot(cummulative, aes(x=Year, y=Catch_est, color=Status))+
+  geom_line(size=1)+
+  labs(x="Year", y="Catch (metric tons)", title="Cummulative Catch")+
+  #scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
+  theme_classic()+
+   theme(axis.title.y = element_text(vjust=3))+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+catch<- catch+
+   facet_wrap(~ Adjusted, scales = "free_y", ncol=2)
+  
+ggplotly(catch)
+
+
+#revenue<- ggplot(cummulative, aes(x=Year, y=Revenue_est, color=Status))+
+ # geom_line(size=1)+
+  #labs(x="Year", y="Revenue (USD)", title="Cummulative Revenue (profit-cost)")+
+  #scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
+  #theme_classic()+
+   #theme(axis.title.y = element_text(vjust=3))+
+  #scale_x_continuous(expand=c(0,0))+
+  #scale_y_continuous(expand=c(0,0))+
+  #theme(legend.title=element_blank())
+
+#revenue<- revenue+
+ #  facet_wrap(~ Adjusted, scales = "free_y", ncol=2)
+  
+#ggplotly(revenue)
+```
+
+
+Catch Series Over Time 
+
+```{r}
+
+
+CommonName<-read.csv(here::here("raw_data", "CommonName.csv"))%>%
+ filter(Genus== "Atrina"
+        |Genus=="Octopus"
+        |Genus=="Callinectes"
+        |Genus=="Scomberomorus"
+        |Genus=="Epinephelus"
+        |Genus=="Mugil"
+        |Genus=="Panulirus"
+        |Genus=="Cephalopholis"
+        |Genus=="Dasyatis"
+        |Genus=="Micropogonias"
+        |Genus=="Lutjanus"
+        |Genus=="Squatina"
+        |Genus=="Sphoeroides")%>%
+  select(Genus, CommonName)
+
+genus_catch<-read.csv(here::here("data", "function_inputs", "catch_Genus.csv"))%>%
+   filter(Genus== "Atrina"
+        |Genus=="Octopus"
+        |Genus=="Callinectes"
+        |Genus=="Scomberomorus"
+        |Genus=="Epinephelus"
+        |Genus=="Mugil"
+        |Genus=="Panulirus"
+        |Genus=="Cephalopholis"
+        |Genus=="Dasyatis"
+        |Genus=="Micropogonias"
+        |Genus=="Lutjanus"
+        |Genus=="Squatina"
+        |Genus=="Sphoeroides")%>%
+  filter(!(Ano==2000))%>%
+  merge( CommonName, by="Genus")
+
+
+
+
+colourCount = length(unique(genus_catch$CommonName))
+getPalette = colorRampPalette(brewer.pal(9, "Set1"))
+
+ggplot(genus_catch, aes(x=Ano, y=MT, fill=CommonName))+
+  geom_area(position = 'stack')+
+  labs(title = "Historical landings 2015-2015", x = "Year", y= "Landings (metric tons)") +
+  scale_x_continuous(expand=c(0,0), labels=c(2005, 2007, 2010, 2012, 2015))+
+  scale_y_continuous(expand=c(0,0))+
+  scale_fill_manual(values = getPalette(colourCount))+
+  theme_classic()
+
+ggsave("historicalcatch.jpg", width=8, height = 5, dpi=300)
+
+?scale_x_continuous
+```
+
+
+
+
+```{r}
+LandingSites<- read.csv (here::here("raw_data", "landingsites.csv"))%>%
+  filter(Confirmado=="y")
+
+All_Genus<-read.csv(here::here("raw_data", "Focal_sp_Genus.csv")) #All values in USD/MT
+
+catch<- readRDS (here::here("raw_data", "conapesca.RDS"))
+
+catch<- catch %>%
+  filter(Estado=="Baja california"| Estado=="Sonora")%>%
+  filter(!(NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))%>%
+  merge(LandingSites, by="SitioDesembarque")%>%
+  tidyr::separate(NombreCientifico,into="Genus", sep=" ", extra='drop', remove=FALSE)%>%
+  mutate_at(.vars = "Genus", .funs = gsub, pattern = " spp", replacement = "")%>%
+  merge(All_Genus, by="Genus")
+
+catch_genus<-catch%>%
+  group_by(Genus, Ano)%>%
+  summarize(MT=sum(PesoVivo)/1000)%>%
+   filter(!(Ano==2000))
+
+catch_genus<-catch_genus%>%
+  filter(!(Genus=="Anisotremus"| Genus== "Argopecten"))%>%
+  
+
+colourCount = length(unique(catch_genus$Genus))
+getPalette = colorRampPalette(brewer.pal(9, "Set1"))
+
+catch<-ggplot(catch_genus, aes(x=Ano, y=MT, fill=Genus))+
+  geom_area(position = 'stack', show.legend = FALSE)+
+  labs(x = "Year", y= "Landings (metric tons)") +
+  scale_x_continuous(expand=c(0,0), labels=c(2005, 2007, 2010, 2012, 2015))+
+  scale_y_continuous(expand=c(0,0))+
+  #xlim(c(2005, 2007, 2010, 2012, 2015))
+  scale_fill_manual(values = getPalette(colourCount))+
+  theme_classic(base_size = 20)
+
+ggplotly(catch)
+
+ggsave("catch.jpg", width=10, height = 5, dpi=300)
+
+
+```
+
+
+

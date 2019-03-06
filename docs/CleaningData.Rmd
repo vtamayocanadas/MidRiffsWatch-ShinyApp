@@ -1,0 +1,154 @@
+---
+title: "Cleaning data"
+author: "Seleni Cruz"
+date: "May 14, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Loading packages
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+  library(ggplot2)
+  library(dplyr)
+  library(sf)
+})
+```
+
+#Load .RDS file 
+Filter national data set to just Sonora and Baja California Sur
+```{r}
+
+catch<- readRDS (here("raw_data", "conapesca.RDS"))
+catch<- readRDS (here("raw_data", "conapesca.RDS"))%>%
+  filter(Estado== "Baja california sur"| Estado=="Sonora")
+
+length(unique(catch$NombreCientifico))
+length(unique(catch$Ano))
+sum(catch$Valor)
+
+#Total yearly landings and value in pesos and USD
+landings<- catch%>%
+  group_by(Ano)%>%
+  summarize(weight=sum(PesoVivo),
+            value=sum(Valor))%>%
+  mutate(usdM= (value/16)/1000000)
+
+avglandings<-mean(landings$weight) #average total landings 2010-2015
+
+#Total landings by species by year
+ranked_yr<- catch%>%
+  group_by(NombreCientifico, Ano)%>%
+  summarise(value=sum(Valor), kg=sum(PesoVivo),
+            usdM=((value)/16)/1000000,
+            kgM=kg/1000000)%>%
+  as.data.frame()
+
+#Average landings and value by species during 2010-2015
+ranked_avg<- ranked_yr%>%
+  group_by(NombreCientifico)%>%
+  summarize(avgvalue=mean(value), usdM= (avgvalue/16)/1000000, avgkg=mean(kg))
+#calculating percentages of total landings and value by species 
+ranked_avg<-ranked_avg%>%
+  mutate(kg_percent= ((avgkg/sum(avgkg))*100), value_percent= (avgvalue/sum(avgvalue)*100))
+
+```
+
+#Top 15 most valuable species on average 2010-2015
+```{r}
+top_value<- ranked_avg %>%
+  arrange(desc(avgvalue))%>%
+  mutate(value_rank= 1:n())
+
+head(top_value, 10)
+
+#note: most valuable species accounts only for 4% of toal landings but accounts for 28% of value. top 4 species are shrimps
+```
+
+
+#Top 15 species with highest landings on average 2010-2015
+```{r}
+top_landings<- ranked_avg %>%
+  arrange(desc(avgkg))%>%
+  mutate(kg_rank= 1:n())
+top_landings
+
+```
+
+
+#Load species from Stuart with 17 focial species
+
+```{r}
+
+species<-read.csv(here("raw_data", "finalfocalspecies.csv"))
+
+landings<- top_landings%>%
+  select(NombreCientifico, avgkg, kg_percent, kg_rank)
+
+merged<-merge(species, landings, by= "NombreCientifico")
+
+```
+
+#Update price in Catch data with values in species 
+
+```{r}
+value<- catch%>%
+  select(NombreCientifico, Mes, Ano, PesoVivo)
+
+spp<- species%>%
+  select(NombreCientifico, CommonName, Min2018, Max2018, Average2018)
+
+
+merged<-merge(value, spp, by= "NombreCientifico")%>%
+   mutate(minvalue=(PesoVivo*Min2018))%>%
+  mutate(avgvalue=(PesoVivo* Max2018))%>%
+   mutate(maxvalue=(PesoVivo*Average2018))%>%
+  as.data.frame()
+
+mostvaluable<- merged%>%
+group_by(NombreCientifico, Ano)%>%
+  summarise(value=sum(avgvalue), kg=sum(PesoDesembarcado),
+            usdM=((mean(avgvalue)/16)/1000000),
+            avg_kgM=mean(kg)/1000000)%>%
+  arrange(desc(usdM))%>%
+  as.data.frame()
+
+ranked<- mostvaluable%>%
+  group_by(NombreCientifico)%>%
+  summarize(avgvalue=mean(value), usdM= (avgvalue/16)/1000000, avgkg=mean(kg))
+
+v<-top_value%>%
+  select(NombreCientifico, value_percent, value_rank)
+
+l<-top_landings%>%
+  select(NombreCientifico, kg_percent, kg_rank)
+
+tracy<-species%>%
+  select(NombreCientifico, Tracy, NombreCommum)
+
+ranked<-merge(ranked, v, by="NombreCientifico")
+ranked<-merge(ranked, l, by="NombreCientifico")
+ranked<-merge(ranked, tracy, by="NombreCientifico")
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
