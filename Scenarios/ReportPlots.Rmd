@@ -260,6 +260,7 @@ B<-ggplot(plot2, aes(x=Year, y=Biomass_est, group=Size, color=Size))+
   labs(subtitle= "Biomass", y="1000s MT")+
   theme_classic(base_size = 24)
 
+
 C<-ggplot(plot2, aes(x=Year, y=Catch_est, group=Size, color=Size))+
   geom_line(size=1.5)+
   labs(subtitle= "Catch", y="1000s MT")+
