@@ -8,25 +8,26 @@
 #
 
 library(shiny)
-library(tidyverse)
-library(ggplot2)
-library(here)
-library(plotly)
-library(tidyverse)
-library(gganimate)
-library(ggrepel)
-library(ggridges)
-library(ggpubr)
-library(gridExtra)
-library(grid)
+#library(tidyverse)
+#library(ggplot2)
+#library(here)
+#library(plotly)
+#library(tidyverse)
+#library(gganimate)
+#library(ggrepel)
+#library(ggridges)
+#library(ggpubr)
+#library(gridExtra)
+#library(grid)
+
 #height = 300, width =500, src = "logo-cobi-hd.png"
 
 
-#View(data)
 ui <- navbarPage(title = "Midriff's Watch Tool",
-                
-        tabPanel(title = "Background", #tab1
-                 tags$h2("Welcome to the MidRiff Islands - Mexico!"),
+
+###tab1                                 
+        tabPanel(title = "Background", 
+                 tags$h2("Welcome to the MidRiff Islands, Mexico!"),
         img(src = ("ocean_basemap.png")), #insert logo    
                            
         tags$h3("Did you know how important this region is for Mexico?"),
@@ -45,87 +46,123 @@ ui <- navbarPage(title = "Midriff's Watch Tool",
         br("Get to know the results of projecting and aggregating information on the most important 13 fisheries in the region. 
            Those fisheries account for approximately 90% of all landings!"))), #tab1
      
-        tabPanel(title = "Conservation, Food and Livelihoods", #tab2
+###tab2        
+        tabPanel(title = "Conservation, Food, & Livelihoods", 
         h3("Select Biomass, Catch or Profits and compare hte projections made with different marine reserve scenarios."), 
-        p("There are four Marine Reserve size scenarios: Busniness as Usual (BAU), 5%, 20%, and 40% of the Midriff Islands 
-          region in the Gulf of California (study area)."), #text description
+        p("There are four Marine Reserve size scenarios: Busniness as Usual (BAU), 5%, 20%, and 40% of the Midriff Islands region in the Gulf of California (study area)."), #text description
        
-         navlistPanel(h3("This is the current (2019) status of the 13 main fisheries in the MidRiff Islands"), 
-                      img(height = 500, width =800, src = "kobe_w_labels.jpg")
-          ), #dropdown menu
-        
-        radioButtons(inputId="metrics", label = "Choose Biomass Fisheries Metrics",
-                     c("Biomass (MT)",
-                       "Catch (MT)",
-                       "Profit (USD)")),
-        mainPanel(
-          tabsetPanel(
-            type="tab",
-            tabPanel("Biomass",
-            plotOutput("projectionB")),
-          tabPanel("Catch",
-            plotOutput("projectionC")),
-          tabPanel("Profit",
-            plotOutput("projectionP"))
-          )
-        )),   #tab2
+        sidebarLayout(
+          sidebarPanel(
+           radioButtons(inputId = "options", label = "Choose Fisheries Measurements",
+                        c("Biomass (MT)",
+                          "Catch (MT)",
+                          "Profit (USD)")) #radio buttons
+          
+  ### INSERT ACTION BUTTON HERE           
+           #actionButton("conditionsButton","View Existing Conditions",
+           #           
+           #              mainPanel(
+           #               plotOutput("conditions")
+           #             ) #mainPanel action button
+           #         ) #actionButton
+  
+  ### code for image of current status kobe plot
+      #h3("This is the current status of the 13 main fisheries in the MidRiff Islands (2019)"), 
+      #img(height = 500, width =800, src = "kobe_w_labels.jpg"),
+  
+           ),#sidebarPanel
+          
+          mainPanel(
+            tabsetPanel(type = "tab",
+                        imageOutput("projection")
+            ) #tabsetPanel
+          )#mainPanel
+          
+             
+            )#sidebarlayout
+        ), #tab2
+      
                                        
-               
-      tabPanel(title = "Explore the Fisheries", #tab3
+###tab3
+
+      tabPanel(title = "Explore the Fisheries",
                navlistPanel(
                   navbarMenu(title = "Choose one",
-                           tabPanel((strong("Clam")), em("Atrina tuberculosa")),
-                           tabPanel((strong("Crab")),em("Callinectes bellicosus")),
-                           tabPanel((strong("Graysby")),em("Cephalopolis cruentata")),
-                           tabPanel((strong("Diamond Stingray")),em("Dasyatis dipterura")),
-                           tabPanel((strong("Rooster Hind")),em("Epinephelus acanthistius")),
-                           tabPanel((strong("Yellow Snapper")),em("Lutjanus argentiventris")),
-                           tabPanel((strong("Gulf Weakfish")),em("Cynoscion othonopterus")),
-                           tabPanel((strong("White mullet")),em("Mugil curema")),
-                           tabPanel((strong("Octopus")),em("Octopus bimaculatus")),
-                           tabPanel((strong("Lobster")),em("Panilurus inflatus")), 
-                           tabPanel((strong("Atlantic Spanish Mackerel")),em("Scomberomorus maculatus")), 
-                           tabPanel((strong("Bullseye puffer")),em("Sphoeroides annulatus")), 
-                           tabPanel((strong("Pacific Angel Shark")),em("Squatina californica")) 
-                          )
-                  )
+                           tabPanel((strong("Clam")), em("Atrina tuberculosa"), "(Clam)"),
+                           tabPanel((strong("Crab")),em("Callinectes bellicosus"), "(Crab)"),
+                           tabPanel((strong("Graysby")),em("Cephalopolis cruentata"), "(Graysby)"),
+                           tabPanel((strong("Diamond Stingray")),
+                                    em("Dasyatis dipterura"), "(Diamond Stingray)"),
+                           tabPanel((strong("Rooster Hind")),
+                                    em("Epinephelus acanthistius"), "(Rooster Hind)"),
+                           tabPanel((strong("Yellow Snapper")),
+                                    em("Lutjanus argentiventris"), "(Yellow Snapper)"),
+                           tabPanel((strong("Gulf Weakfish")),
+                                    em("Cynoscion othonopterus"), "(Gulf Weakfish)"),
+                           tabPanel((strong("White mullet")),em("Mugil curema"), "(White mullet)"),
+                           tabPanel((strong("Octopus")),em("Octopus bimaculatus"), "(Octopus)"),
+                           tabPanel((strong("Lobster")),em("Panilurus inflatus"), "(Lobster)"), 
+                           tabPanel((strong("Atlantic Spanish Mackerel")),
+                                    em("Scomberomorus maculatus"), "(Atlantic Spanish Mackerel)"), 
+                           tabPanel((strong("Bullseye puffer")),
+                                    em("Sphoeroides annulatus"), "(Bullseye puffer)"), 
+                           tabPanel((strong("Pacific Angel Shark")),
+                                    em("Squatina californica"), "(Pacific Angel Shark)")
+                           
+                          )#navbarMenu
+                  )#navlistPanel
                )#tab3  
-      )#main ui close token              
+      )
+    #main ui close token              
                      
 
 
-# Define server logic required to draw a histogram
+# Define server logic required to call images of outputs from www folder
+
 server <- function(input, output) {
     
+#outputs for projections using radio buttons 
   
-    output$projectionB <- renderPlot({
-      res <- read.csv("www/PatchModel_size.csv")
-      linedf<-res%>%
-        group_by(Adjusted, Scenario, Size, Year)%>%
-        summarize(Biomass_est=sum(Biomass_est)/1000, 
-                  Biomass_lo=sum(Biomass_lo)/1000, 
-                  Biomass_hi=sum(Biomass_hi)/1000,
-                  Catch_est=sum(Catch_est)/1000,
-                  Catch_lo=sum(Catch_lo)/1000, 
-                  Catch_hi=sum(Catch_hi)/1000, 
-                  PV_est=sum(PV_est)/1000000,
-                  PV_lo=sum(PV_lo)/1000000, 
-                  PV_hi=sum(PV_hi)/1000000)
-      plot2<- linedf%>%
-        filter(Adjusted=="MT")%>%
-        filter (Scenario =="2015"|Scenario == "0")%>%
-        filter(!(Size=="50%"))
+    output$projection <- renderImage({
+      # When input$n is 3, filename is ./images/image3.jpeg
       
-      plot2$Size <- factor(plot2$Size, levels = c("BAU", "5%", "20%", "40%"))
+##biomass projection
+      biomass.png <- normalizePath(file.path('www',
+                                paste(input$options, 
+                                      '.png', 
+                                      sep=''))) #normalizepath
       
-      output$Biomass<-ggplot(plot2, aes(x=Year, y= Biomass_est, group=Size, color=Size))+
-        geom_line(size=1.5)+
-        labs(subtitle= "Biomass", y="1000s MT")+
-        theme_classic(base_size = 24) 
+      # Return a list containing the filename and alt text
+      list(src = biomass.png,
+           alt = paste("biomass projection", input$options))
       
+##catch projection
       
-    })
-}
+     catch.png <- normalizePath(file.path('www',
+                               paste('catch', 
+                                     input$options, 
+                                    '.png', 
+                                    sep=''))) #normalizepath
+
+      list(src = catch.png,
+           alt = paste("catch projection", input$options))
+   
+##profit projection   
+      profit.png <- normalizePath(file.path('www/',
+                              paste('profit', 
+                              input$options, 
+                              '.png', 
+                              sep=''))) #normalizepath
+      
+      # Return a list containing the filename and alt text
+      list(src = profit.png,
+           alt = paste("profit projection", input$options))
+      
+    }#renderImage
+    , deleteFile = FALSE) #renderImage
+    
+    
+} #brace for entire server
 
 # Run the application 
 shinyApp(ui = ui, server = server)

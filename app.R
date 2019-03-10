@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+library(shinyWidgets)
 
 
 ui <- fluidPage(
@@ -18,24 +19,36 @@ ui <- fluidPage(
   title = "Options",
   navbarPage(title = "Options", 
              navlistPanel(
-    navbarMenu(title = "Fisheries", tabPanel("Atrina tuberculosa"), tabPanel("Callinectes Bellicosus"), tabPanel("Cephalopolis cruentata"), tabPanel("Dasyatis dipterura"), tabPanel("Epinephelus acanthistius"), tabPanel("Lutjanus argentiventris"), tabPanel("Cynoscion othonopterus"), tabPanel("Mugil curema"), tabPanel("Octopus bimaculatus"), tabPanel("Panilurus Inflatus"), tabPanel("Scomberomorus maculatus"), tabPanel("Sphoeroides annulatus"), tabPanel("Squatina californica")),
+    navbarMenu(title = "Fisheries", tabPanel("Atrina tuberculosa"), tabPanel("Callinectes Bellicosus"), tabPanel("Cephalopolis cruentata"), tabPanel("Dasyatis dipterura"), tabPanel("Epinephelus acanthistius"), tabPanel("Lutjanus argentiventris"), tabPanel("Cynoscion othonopterus"), tabPanel("Mugil curema"), tabPanel("Octopus bimaculatus"), tabPanel("Panilurus Inflatus"), tabPanel("Scomberomorus maculatus"), tabPanel("Sphoeroides annulatus"), tabPanel("Squatina californica")), #navbarmenu
+    
     tabPanel(title = "Biomass"),
     tabPanel(title = "Catch"),
-    tabPanel("Profit")),
+    tabPanel("Profit")), #navlistpanel
+    
+    radioButtons("metrics", "Fisheries Metrics",
+                 c("biomass" = "Biomass",
+                   "catch" = "Catch",
+                   "profit" = "Profit"
+                   )), #ratiobuttons
+    
   sidebarLayout(
     sidebarPanel(
       sliderInput(
-        inputId = "num",
-        label= "How many years of active Marine Reserves?",
-        value = 2030,
-        min = 2015,
-        max = 2065)), 
+        inputId = "size",
+        label= "Size of Marine Reserve (% region of interest)",
+        value = 5,
+        min = 5,
+        max = 40,
+      
     mainPanel(
       plotOutput("hist")
-    )
-  )
-)
-)
+      
+    ) #mainPanel
+      ) #sliderInput
+        ) #sidebarPanel
+          ) #sidebarLayout
+) #navbarpage
+) #fluidPage
   
  
 
@@ -43,10 +56,11 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
     
-    output$hist <- renderPlot({
-        hist(rnorm(input$num), main = input$title)
-    })
-}
+  output$hist <- renderPlot({
+    hist(rnorm(input$size), main = input$title)
+  }) #renderplot
+  
+} #function bracket
 
 # Run the application 
 shinyApp(ui = ui, server = server)
