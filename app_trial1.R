@@ -48,15 +48,15 @@ ui <- navbarPage(title = "Midriff's Watch Tool",
      
 ###tab2        
         tabPanel(title = "Conservation, Food, & Livelihoods", 
-        h3("Select Biomass, Catch or Profits and compare hte projections made with different marine reserve scenarios."), 
+        h3("Select Biomass, Catch or Profits and compare the projections made with different marine reserve scenarios."), 
         p("There are four Marine Reserve size scenarios: Busniness as Usual (BAU), 5%, 20%, and 40% of the Midriff Islands region in the Gulf of California (study area)."), #text description
        
         sidebarLayout(
           sidebarPanel(
            radioButtons(inputId = "options", label = "Choose Fisheries Measurements",
-                        c("Biomass (MT)",
-                          "Catch (MT)",
-                          "Profit (USD)")) #radio buttons
+                        c("Biomass (MT)" = "biomass",
+                          "Catch (MT)" = "catch",
+                          "Profit (USD)" = "profit")) #radio buttons
           
   ### INSERT ACTION BUTTON HERE           
            #actionButton("conditionsButton","View Existing Conditions",
@@ -73,9 +73,8 @@ ui <- navbarPage(title = "Midriff's Watch Tool",
            ),#sidebarPanel
           
           mainPanel(
-            tabsetPanel(type = "tab",
-                        imageOutput("projection")
-            ) #tabsetPanel
+            plotOutput("projection")
+          
           )#mainPanel
           
              
@@ -85,49 +84,56 @@ ui <- navbarPage(title = "Midriff's Watch Tool",
                                        
 ###tab3
 
-      tabPanel(title = "Explore the Fisheries",
-               navlistPanel(
-                  navbarMenu(title = "Choose one",
-                           tabPanel((strong("Clam")), em("Atrina tuberculosa"), "(Clam)"),
-                           tabPanel((strong("Crab")),em("Callinectes bellicosus"), "(Crab)"),
-                           tabPanel((strong("Graysby")),em("Cephalopolis cruentata"), "(Graysby)"),
-                           tabPanel((strong("Diamond Stingray")),
-                                    em("Dasyatis dipterura"), "(Diamond Stingray)"),
-                           tabPanel((strong("Rooster Hind")),
-                                    em("Epinephelus acanthistius"), "(Rooster Hind)"),
-                           tabPanel((strong("Yellow Snapper")),
-                                    em("Lutjanus argentiventris"), "(Yellow Snapper)"),
-                           tabPanel((strong("Gulf Weakfish")),
-                                    em("Cynoscion othonopterus"), "(Gulf Weakfish)"),
-                           tabPanel((strong("White mullet")),em("Mugil curema"), "(White mullet)"),
-                           tabPanel((strong("Octopus")),em("Octopus bimaculatus"), "(Octopus)"),
-                           tabPanel((strong("Lobster")),em("Panilurus inflatus"), "(Lobster)"), 
-                           tabPanel((strong("Atlantic Spanish Mackerel")),
-                                    em("Scomberomorus maculatus"), "(Atlantic Spanish Mackerel)"), 
-                           tabPanel((strong("Bullseye puffer")),
-                                    em("Sphoeroides annulatus"), "(Bullseye puffer)"), 
-                           tabPanel((strong("Pacific Angel Shark")),
-                                    em("Squatina californica"), "(Pacific Angel Shark)")
-                           
-                          )#navbarMenu
-                  )#navlistPanel
-               )#tab3  
-      )
-    #main ui close token              
+tabPanel(title = "Explore the Fisheries",
+      sidebarLayout(
+          sidebarPanel(
+              selectInput("fishery", "Explore the Fisheries",
+                        c("Clam" = "mollusk",
+                          "Crab" = "crab",
+                          "Graysby" = "graysby",
+                          "Diamond Stingray" = "stingray",
+                          "Rooster Hind" = "hind",
+                          "Yellow Snapper" = "snapper",
+                          "Gulf Weakfish" = "corvina",
+                          "White Mullet" = "mullet",
+                          "Octopus" = "octopus",
+                          "Lobster" = "lobster",
+                          "Atlantic Spanish Mackerel" = "mackerel",
+                          "Bullseye Puffer" = "puffer",
+                          "Pacific Angel Shark" = "shark"
+                        
+                          ) #c
+                    ) #selectInput
+                
+                ), #sidebarPanel 
+        
+           mainPanel(
+              plotOutput("pic_spp")
+            
+          ) #mainPanel     
+          
+          
+   ) #sidebarLayout
+              
+               
+      )#tab3  
+     
+
+ )#main ui close token              
                      
 
 
 # Define server logic required to call images of outputs from www folder
 
-server <- function(input, output) {
+server <- function(input, output, session) {
     
-#outputs for projections using radio buttons 
+#####outputs for projections using radio buttons 
   
     output$projection <- renderImage({
       # When input$n is 3, filename is ./images/image3.jpeg
       
 ##biomass projection
-      biomass.png <- normalizePath(file.path('www',
+      biomass.png <- normalizePath(file.path('www/',
                                 paste(input$options, 
                                       '.png', 
                                       sep=''))) #normalizepath
@@ -138,9 +144,8 @@ server <- function(input, output) {
       
 ##catch projection
       
-     catch.png <- normalizePath(file.path('www',
-                               paste('catch', 
-                                     input$options, 
+     catch.png <- normalizePath(file.path('www/',
+                               paste(input$options, 
                                     '.png', 
                                     sep=''))) #normalizepath
 
@@ -149,8 +154,7 @@ server <- function(input, output) {
    
 ##profit projection   
       profit.png <- normalizePath(file.path('www/',
-                              paste('profit', 
-                              input$options, 
+                              paste(input$options, 
                               '.png', 
                               sep=''))) #normalizepath
       
@@ -160,6 +164,33 @@ server <- function(input, output) {
       
     }#renderImage
     , deleteFile = FALSE) #renderImage
+
+    
+    
+#######outputs for fisheries
+    
+    output$pic_spp <- renderImage({
+      # When input$n is 3, filename is ./images/image3.jpeg
+      
+##clam photo
+      mollusk.png <- normalizePath(file.path('www/',
+                                             paste(input$fishery, 
+                                                   '.png', 
+                                                   sep=''))) #normalizepath
+      
+      # Return a list containing the filename and alt text
+      list(src = mollusk.png,
+           alt = paste("clam photo", input$fishery))
+    
+      
+      
+    }#renderImage
+    , deleteFile = FALSE) #renderImage
+    
+    
+    
+    
+    
     
     
 } #brace for entire server
