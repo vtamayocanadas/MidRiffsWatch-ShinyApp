@@ -61,7 +61,7 @@ ui <- fluidPage(
                           "Profit (USD)" = "profit")) #radio buttons
           
   ### Checkbox           
-        #checkboxInput("checkbox", label = "View Existing Conditions", value = TRUE)  #checkbox
+       # checkboxInput("checkbox", label = "View the Cost of No Action", value = TRUE)  #checkbox
   
            ),#sidebarPanel
           
@@ -73,8 +73,10 @@ ui <- fluidPage(
                           in the MidRiff Islands (2019)"), 
                        img(height = 500, width =800, src = "kobe_w_labels.jpg")),
               tabPanel("Projection", 
-                       plotOutput("projection"))
-          
+                       plotOutput("projection")),
+              tabPanel("Cost of No Action", 
+                       plotOutput("no_action"))
+              
           )#tabsetPanel
           
           )#mainPanel   
@@ -171,6 +173,28 @@ server <- function(input, output, session) {
     }#renderImage
     , deleteFile = FALSE) #renderImage
     
+#####output for checkbox
+      
+#      x <- reactive(input$checkbox)
+#    if (x = TRUE) 
+#    {y <- output$no_action}
+#    else
+#    {y <- 0}
+    
+ #   output$no_action <-  renderImage({
+    
+ #      kobe_no0.3.gif <- normalizePath(file.path('www/',
+#                                             paste(input$checkbox, 
+ #                                                '.gif', 
+  #                                               sep=''))) #normalizepath
+    
+     #Return a list containing the filename and alt text
+  #  list(src = kobe_no0.3.gif,
+  #      alt = paste("kobe plot showing cost of no action", input$checkbox)) 
+    
+    
+  #    }#renderImage
+  #     , deleteFile = FALSE) #renderImage
     
     
 #######outputs for fisheries
