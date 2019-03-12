@@ -23,7 +23,9 @@ library(shiny)
 #height = 300, width =500, src = "logo-cobi-hd.png"
 
 
-ui <- navbarPage(title = "Midriff's Watch Tool",
+ui <- fluidPage(
+  
+  navbarPage(title = "Midriff's Watch Tool",
 
 ###tab1                                 
         tabPanel(title = "Background", 
@@ -123,7 +125,8 @@ tabPanel(title = "Explore the Fisheries",
      
 
  )#main ui close token              
-                     
+
+)#fluidPage                    
 
 
 # Define server logic required to call images of outputs from www folder
@@ -143,8 +146,6 @@ server <- function(input, output, session) {
       
       # Return a list containing the filename and alt text
       list(src = biomass.png,
-           height = 200,
-           width = 500,
            alt = paste("biomass projection", input$options))
       
 ##catch projection
