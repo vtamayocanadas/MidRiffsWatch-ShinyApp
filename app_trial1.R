@@ -58,26 +58,25 @@ ui <- navbarPage(title = "Midriff's Watch Tool",
                           "Catch (MT)" = "catch",
                           "Profit (USD)" = "profit")) #radio buttons
           
-  ### INSERT ACTION BUTTON HERE           
-           #actionButton("conditionsButton","View Existing Conditions",
-           #           
-           #              mainPanel(
-           #               plotOutput("conditions")
-           #             ) #mainPanel action button
-           #         ) #actionButton
-  
-  ### code for image of current status kobe plot
-      #h3("This is the current status of the 13 main fisheries in the MidRiff Islands (2019)"), 
-      #img(height = 500, width =800, src = "kobe_w_labels.jpg"),
+  ### Checkbox           
+        #checkboxInput("checkbox", label = "View Existing Conditions", value = TRUE)  #checkbox
   
            ),#sidebarPanel
           
           mainPanel(
-            plotOutput("projection")
+            tabsetPanel(
+              type = "tab",
+              tabPanel("Existing Conditions", 
+                       h3("This is the current status of the 13 main fisheries 
+                          in the MidRiff Islands (2019)"), 
+                       img(height = 500, width =800, src = "kobe_w_labels.jpg")),
+              tabPanel("Projection", 
+                       plotOutput("projection"))
           
-          )#mainPanel
+          )#tabsetPanel
           
-             
+          )#mainPanel   
+  
             )#sidebarlayout
         ), #tab2
       
@@ -108,7 +107,11 @@ tabPanel(title = "Explore the Fisheries",
                 ), #sidebarPanel 
         
            mainPanel(
-              plotOutput("pic_spp")
+             tabsetPanel(
+               type = "tab",
+               tabPanel("Species", 
+                        plotOutput("pic_spp"))
+               ) #tabsetPanel
             
           ) #mainPanel     
           
@@ -140,6 +143,8 @@ server <- function(input, output, session) {
       
       # Return a list containing the filename and alt text
       list(src = biomass.png,
+           height = 200,
+           width = 500,
            alt = paste("biomass projection", input$options))
       
 ##catch projection
@@ -164,7 +169,7 @@ server <- function(input, output, session) {
       
     }#renderImage
     , deleteFile = FALSE) #renderImage
-
+    
     
     
 #######outputs for fisheries
@@ -181,10 +186,130 @@ server <- function(input, output, session) {
       # Return a list containing the filename and alt text
       list(src = mollusk.png,
            alt = paste("clam photo", input$fishery))
+
+##crab photo
+      crab.png <- normalizePath(file.path('www/',
+                                          paste(input$fishery, 
+                                                '.png', 
+                                                sep=''))) #normalizepath
+      
+      # Return a list containing the filename and alt text
+      list(src = crab.png,
+           alt = paste("crab photo", input$fishery))
+
+      
+##graysby photo
+      graysby.png <- normalizePath(file.path('www/',
+                                          paste(input$fishery, 
+                                                '.png', 
+                                                sep=''))) #normalizepath
+      
+      # Return a list containing the filename and alt text
+      list(src = graysby.png,
+           alt = paste("graysby photo", input$fishery)) 
+
+##stingray photo
+     stingray.png <- normalizePath(file.path('www/',
+                                         paste(input$fishery, 
+                                               '.png', 
+                                               sep=''))) #normalizepath
+     
+     # Return a list containing the filename and alt text
+     list(src = stingray.png,
+          alt = paste("stingray photo", input$fishery)) 
+
+##hind photo
+     hind.png <- normalizePath(file.path('www/',
+                             paste(input$fishery, 
+                                   '.png', 
+                                   sep=''))) #normalizepath
+     
+     # Return a list containing the filename and alt text
+     list(src = graysby.png,
+          alt = paste("graysby photo", input$fishery)) 
+      
+##snapper photo
+     snapper.png <- normalizePath(file.path('www/',
+                                         paste(input$fishery, 
+                                               '.png', 
+                                               sep=''))) #normalizepath
+     
+     # Return a list containing the filename and alt text
+     list(src = snapper.png,
+          alt = paste("snapper photo", input$fishery)) 
+      
+##corvina/weakfish photo
+     corvina.png <- normalizePath(file.path('www/',
+                                            paste(input$fishery, 
+                                                  '.png', 
+                                                  sep=''))) #normalizepath
+     
+     # Return a list containing the filename and alt text
+     list(src = corvina.png,
+          alt = paste("corvina photo", input$fishery))
+      
+##mullet photo
+     mullet.png <- normalizePath(file.path('www/',
+                                                paste(input$fishery, 
+                                                             '.png', 
+                                                             sep=''))) #normalizepath
+     
+     # Return a list containing the filename and alt text
+     list(src = mullet.png,
+          alt = paste("mullet photo", input$fishery))
+     
+##octopus photo
+     octopus.png <- normalizePath(file.path('www/',
+                                            paste(input$fishery, 
+                                                  '.png', 
+                                                  sep=''))) #normalizepath
+     
+     # Return a list containing the filename and alt text
+     list(src = octopus.png,
+          alt = paste("octopus photo", input$fishery))
+
+##lobster photo
+     lobster.png <- normalizePath(file.path('www/',
+                                            paste(input$fishery, 
+                                                  '.png', 
+                                                  sep=''))) #normalizepath
+     
+     # Return a list containing the filename and alt text
+     list(src = lobster.png,
+          alt = paste("lobster photo", input$fishery))
     
-      
-      
-    }#renderImage
+##mackerel photo
+     mackerel.png <- normalizePath(file.path('www/',
+                                            paste(input$fishery, 
+                                                  '.png', 
+                                                  sep=''))) #normalizepath
+     
+     # Return a list containing the filename and alt text
+     list(src = mackerel.png,
+          alt = paste("mackerel photo", input$fishery))
+     
+ ##puffer photo
+     puffer.png <- normalizePath(file.path('www/',
+                                            paste(input$fishery, 
+                                                  '.png', 
+                                                  sep=''))) #normalizepath
+     
+     # Return a list containing the filename and alt text
+     list(src = puffer.png,
+          alt = paste("puffer photo", input$fishery))
+
+ ##shark photo
+     shark.png <- normalizePath(file.path('www/',
+                                            paste(input$fishery, 
+                                                  '.png', 
+                                                  sep=''))) #normalizepath
+     
+     # Return a list containing the filename and alt text
+     list(src = shark.png,
+          alt = paste("shark photo", input$fishery))
+     
+          
+       }#renderImage
     , deleteFile = FALSE) #renderImage
     
     
