@@ -45,7 +45,7 @@ ui <- fluidPage(
                            small-scale fisheries (Cinti A et al., 2014)."), 
                         br("The Midriff's Watch Tool help you to better visualize status and projections of the 
                            most important small scale fisheries in the Midriff Islands."),
-                        br("We show two worlds: 1) No marine protection or fisheries management, and 2) Marine reserves implemented."),
+                        br("We show two worlds: 1) Business as Usual BAU (no marine protection), and 2) Marine reserves implemented."),
                         br("To explore, choose the level of protection you want, and get the effects in Biomass (MT), Catch (MT) and Profits (Millions of dollars)."),
                         br("Get to know the results of projecting and aggregating information on the most important 13 fisheries in the region. 
                            Those fisheries account for approximately 90% of all landings!"))), #tab1
@@ -84,8 +84,13 @@ ui <- fluidPage(
                           tabsetPanel(
                             type = "tab",
                             tabPanel("Current Status", 
-                                     h3("This is the current status of the 13 main fisheries 
+                                     h4("This is the current status of the 13 main fisheries 
                                         in the Midriff Islands (2019)"), 
+                                     h6("The current conditions of the fisheries are presented in a KOBE plot. 
+                                     Quadrants show the status as follows: Species that fall in the red quadrant are overfished
+                                     and continue to experience overfishing, species in the yellow quadrant are overfished. 
+                                     Orange quadrant correspond to species that are currently experiencing overfishing, 
+                                        and green quadrant correspond to species that are in  good health."),
                                      img(height = 300, width =480, src = "kobe_w_labels.jpg")),
                             tabPanel("Projection", 
                                      plotOutput("projection",
@@ -163,7 +168,7 @@ server <- function(input, output, session) {
                                                  sep=''))) #normalizepath
     
     # Return a list containing the filename and alt text
-    list(src = biomass.png,
+    list(src = biomass.png, 
          alt = paste("biomass projection", input$options),
          height = 400, 
          width = 500)
