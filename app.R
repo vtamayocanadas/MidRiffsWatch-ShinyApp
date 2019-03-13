@@ -31,7 +31,7 @@ ui <- fluidPage(
              
              ###tab1                                 
              tabPanel(title = "Background", 
-                      tags$h2("Welcome to the MidRiff Islands, Mexico!"),
+                      tags$h2("Welcome to the Midriff Islands, Mexico!"),
                       img(src = ("ocean_basemap.png")), #insert logo    
                       
                       tags$h3("Did you know how important this region is for Mexico?"),
@@ -43,7 +43,7 @@ ui <- fluidPage(
                         br("The provision of these services are at risk due to climate change but also well-documented 
                            policy failures, some leading to declines in stocks of fish caught in a large number of 
                            small-scale fisheries (Cinti A et al., 2014)."), 
-                        br("The MidRiff's Watch Tool help you to better visualize status and projections of the 
+                        br("The Midriff's Watch Tool help you to better visualize status and projections of the 
                            most important small scale fisheries in the Midriff Islands."),
                         br("We show two worlds: 1) No marine protection or fisheries management, and 2) Marine reserves implemented."),
                         br("To explore, choose the level of protection you want, and get the effects in Biomass (MT), Catch (MT) and Profits (Millions of dollars)."),
@@ -52,8 +52,21 @@ ui <- fluidPage(
              
              ###tab2        
              tabPanel(title = "Conservation, Food, & Livelihoods", 
-                      h3("Select Biomass, Catch or Profits and compare the projections made with different marine reserve scenarios."), 
-                      p("There are four Marine Reserve size scenarios: Busniness as Usual (BAU), 5%, 20%, and 40% of the Midriff Islands region in the Gulf of California (study area)."), #text description
+                      h3("Select Biomass (Conservation), Catch (Food) or Profits (Livelihoods) and compare the projections made with different marine reserve scenarios."), 
+                      p("There are four Marine Reserve size scenarios: Business as Usual (BAU)= 0%, 5%, 20%, and 40% of the Midriff 
+                        Islands region in the Gulf of California (study area).",
+                        br(strong("BIOMASS")),
+                        br("We show total biomass in the Midriff Islands region from 2015 to 2065. 
+                        Different lines correspond to different marine size scenarios."),
+                        br(strong("CATCH")),
+                        br("Considering 13 main fisheries in the region we show catch from 2015 to 2065. 
+                        Different lines correspond to different marine reserves scenarios."),
+                        br(strong("PROFIT")),
+                        br("Profits are calculated based on 2018 market prices and have been discounted with 
+                        10% rate since that is the rate the Mexican government uses for their projects. 
+                        We project profits from 2015 to 2065. Different lines correspond to different marine 
+                        reserves scenarios.")),
+#text description
                       
                       sidebarLayout(
                         sidebarPanel(
@@ -70,10 +83,10 @@ ui <- fluidPage(
                         mainPanel(
                           tabsetPanel(
                             type = "tab",
-                            tabPanel("Existing Conditions", 
+                            tabPanel("Current Status", 
                                      h3("This is the current status of the 13 main fisheries 
-                                        in the MidRiff Islands (2019)"), 
-                                     img(height = 500, width =800, src = "kobe_w_labels.jpg")),
+                                        in the Midriff Islands (2019)"), 
+                                     img(height = 300, width =480, src = "kobe_w_labels.jpg")),
                             tabPanel("Projection", 
                                      plotOutput("projection",
                                                 width = "100%")),
