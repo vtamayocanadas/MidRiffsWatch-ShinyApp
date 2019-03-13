@@ -23,6 +23,7 @@ library(shiny)
 #height = 300, width =500, src = "logo-cobi-hd.png"
 
 
+
 ui <- fluidPage(
   
   navbarPage(title = "Midriff's Watch Tool",
@@ -73,7 +74,8 @@ ui <- fluidPage(
                           in the MidRiff Islands (2019)"), 
                        img(height = 500, width =800, src = "kobe_w_labels.jpg")),
               tabPanel("Projection", 
-                       plotOutput("projection")),
+                       plotOutput("projection",
+                                  width = "100%")),
               tabPanel("Cost of No Action", 
                        plotOutput("no_action"))
               
@@ -134,44 +136,47 @@ tabPanel(title = "Explore the Fisheries",
 # Define server logic required to call images of outputs from www folder
 
 server <- function(input, output, session) {
-    
+
 #####outputs for projections using radio buttons 
   
-    output$projection <- renderImage({
-      # When input$n is 3, filename is ./images/image3.jpeg
-      
-##biomass projection
-      biomass.png <- normalizePath(file.path('www/',
-                                paste(input$options, 
-                                      '.png', 
-                                      sep=''))) #normalizepath
-      
-      # Return a list containing the filename and alt text
-      list(src = biomass.png,
-           alt = paste("biomass projection", input$options))
-      
-##catch projection
-      
-     catch.png <- normalizePath(file.path('www/',
-                               paste(input$options, 
-                                    '.png', 
-                                    sep=''))) #normalizepath
-
-      list(src = catch.png,
-           alt = paste("catch projection", input$options))
-   
-##profit projection   
-      profit.png <- normalizePath(file.path('www/',
-                              paste(input$options, 
-                              '.png', 
-                              sep=''))) #normalizepath
-      
-      # Return a list containing the filename and alt text
-      list(src = profit.png,
-           alt = paste("profit projection", input$options))
-      
-    }#renderImage
-    , deleteFile = FALSE) #renderImage
+  output$projection <- renderImage({
+    # When input$n is 3, filename is ./images/image3.jpeg
+    
+    ##biomass projection
+    biomass.png <- normalizePath(file.path('www/',
+                                           paste(input$options, 
+                                                 '.png', 
+                                                 sep=''))) #normalizepath
+    
+    # Return a list containing the filename and alt text
+    list(src = biomass.png,
+         alt = paste("biomass projection", input$options),
+         height = 400, 
+         width = 500)
+    
+    ##catch projection
+    
+    catch.png <- normalizePath(file.path('www/',
+                                         paste(input$options, 
+                                               '.png', 
+                                               sep=''))) #normalizepath
+    
+    list(src = catch.png,
+         alt = paste("catch projection", input$options))
+    
+    ##profit projection   
+    profit.png <- normalizePath(file.path('www/',
+                                          paste(input$options, 
+                                                '.png', 
+                                                sep=''))) #normalizepath
+    
+    # Return a list containing the filename and alt text
+    list(src = profit.png,
+         alt = paste("profit projection", input$options))
+    
+  }#renderImage
+  , deleteFile = FALSE) #renderImage
+  
     
 #####output for checkbox
       
