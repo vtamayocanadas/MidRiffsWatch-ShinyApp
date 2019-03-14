@@ -24,95 +24,93 @@ library(shinythemes)
 
 #height = 300, width =500, src = "logo-cobi-hd.png"
 
-ui <- fluidPage(
-  theme = shinytheme("cerulean"),
-  
-  navbarPage(title = "Midriff's Watch Tool",
-             
-             ###tab1                                 
-             tabPanel(title = "Background", 
-                      tags$h2("Welcome to the Midriff Islands, Mexico!"),
-                      h6("The map show in yellow the network of marine reserves designed in 2015"),
-                      img(src = ("ocean_basemap.png")), #insert logo    
+ui <- fluidPage(theme = shinytheme("cerulean"),
+              navbarPage(title = "Midriff Watch Tool",
+###tab1                                 
+      tabPanel(title = "Background", 
+              tags$h2("Welcome to the Midriff Islands, Mexico!"),
+              h6("Shown below in yellow is a network of marine 
+                       reserves designed in 2015"),
+              img(src = "ocean_basemap.png", height = 500, width = 400), #insert map   
                       
-                      tags$h3("Did you know how important this region is for Mexico?"),
-                      p("The Gulf of California (GOC) generates over 50,000 fishing jobs involving approximately 
-                        2,600 vessels, of which 2,500 are small scale (Cisneros-Mata, 2010).
-                        The GOC is characterized by high levels of primary productivity, biological diversity, 
-                        and fish biomass, thereby providing the local human population
-                        a large array of economically and culturally important ecosystem services, including fisheries.",
-                        br("The provision of these services are at risk due to climate change but also well-documented 
-                           policy failures, some leading to declines in stocks of fish caught in a large number of 
-                           small-scale fisheries (Cinti A et al., 2014)."), 
-                        br("The Midriff's Watch Tool help you to better visualize status and projections of the 
-                           most important small scale fisheries in the Midriff Islands."),
-                        br("We show two worlds: 1) Business as Usual BAU (no marine protection), and 2) Marine reserves implemented."),
-                        br("To explore, choose the level of protection you want, and get the effects in Biomass (MT), Catch (MT) and Profits (Millions of dollars)."),
-                        br("Get to know the results of projecting and aggregating information on the most important 13 fisheries in the region. 
-                           Those fisheries account for approximately 90% of all landings!"))), #tab1
+              tags$h3("Do you know how important this region is for Mexico?"),
+              p("The Gulf of California (GOC) generates over 50,000 
+                      fishing jobs, which involves approximately 2,600 vessels. Of these, 2                         ,500 are small-scale fishers (Cisneros-Mata, 2010).The GOC is                                 characterized by high levels of primary productivity, biological                              diversity, and fish biomass. This provides local people with a wide                           array of economically and culturally important ecosystem                                      services, including fisheries.",
+              br("Well-documented policy failures and climate change threaten the provision of                       these services, including declines in fish stocks caught by many small                        -scale fisheries (Cinti A et al., 2014)."), 
+              br("The Midriff's Watch Tool is designed to visualize the current and future                          status of the most important small scale fisheries in the Midriff                             Islands under different marine reserve scenarios."),
+              br("We show two worlds: 1) Business as Usual BAU (no marine protection), and 2)                       Marine Reserves implemented."),
+              br("To explore, Choose to explore Biomass (MT), Catch (MT) and Profits (Millions of dollars) for the most important 13 fisheries in the region. These fisheries account for                        approximately 90% of all landings!")                          
+              )#p
+              ), #tab1
+
              
-             ###tab2        
-             tabPanel(title = "Conservation, Food, & Livelihoods", 
-                      h3("Select Biomass (Conservation), Catch (Food) or Profits (Livelihoods) and compare the projections made with different marine reserve scenarios."), 
-                      p("There are four Marine Reserve size scenarios: Business as Usual (BAU)= 0%, 5%, 20%, and 40% of the Midriff 
-                        Islands region in the Gulf of California (study area).",
-                        br(strong("BIOMASS - Conservation")),
-                        br("We show total biomass in the Midriff Islands region from 2015 to 2065. 
-                        Different lines correspond to different marine size scenarios."),
-                        br(strong("CATCH - Food")),
-                        br("Considering 13 main fisheries in the region we show catch from 2015 to 2065. 
-                        Different lines correspond to different marine reserves scenarios."),
-                        br(strong("PROFIT - Livelihoods")),
-                        br("Profits are calculated based on 2018 market prices and have been discounted with 
-                        10% rate since that is the rate the Mexican government uses for their projects. 
-                        We project profits from 2015 to 2065. Different lines correspond to different marine 
-                        reserves scenarios.")),
+###tab2        
+        tabPanel(title = "Conservation, Food, & Livelihoods", 
+                h3("Select Biomass (Conservation), Catch (Food) or Profits (Livelihoods) and                        compare the projections made with different marine reserve scenarios."),
+                p("There are four Marine Reserve size scenarios: Business as Usual (BAU)= 0%,                       5%, 20%, and 40% of the Midriff Islands region in the Gulf of California                       (study area)."),  #p
 #text description
                       
-                      sidebarLayout(
-                        sidebarPanel(
-                          radioButtons(inputId = "options", label = "Choose Fisheries Measurements",
+sidebarLayout(
+        sidebarPanel(
+          #radiobuttons  
+          radioButtons(inputId = "options", label = "See results in Projection Tab",
                                        c("Biomass (MT)" = "biomass",
                                          "Catch (MT)" = "catch",
-                                         "Profit (USD)" = "profit")) #radio buttons
+                                         "Profit (USD)" = "profit")), #radio buttons
+          
+          radioButtons(inputId = "table", label = "See results in Current Status Tab",
+                       c("Cost of No Action" = "kobe_no0.3",
+                         "Species Contribution to Total Catch" = "table_percent")) #radio buttons2
+##action button                          
+        #actionButton(inputId = "clicks",
+        #                 label = "See species and catch (%)", 
+        #                 data = "table_percent") #action button
                           
-                          ### Checkbox           
-                          # checkboxInput("checkbox", label = "View the Cost of No Action", value = TRUE)  #checkbox
-                          
-                        ),#sidebarPanel
+          ),#sidebarPanel
                         
-                        mainPanel(
-                          tabsetPanel(
-                            type = "tab",
-                            tabPanel("Current Status", 
-                                     h4("This is the current status of the 13 main fisheries 
-                                        in the Midriff Islands (2019)"), 
-                                     h6("The current conditions of the fisheries are presented in a KOBE plot. 
-                                     Quadrants show the status as follows: Species that fall in the red quadrant are overfished
-                                     and continue to experience overfishing, species in the yellow quadrant are overfished. 
-                                     Orange quadrant correspond to species that are currently experiencing overfishing, 
-                                        and green quadrant correspond to species that are in  good health."),
-                                     img(height = 300, width =480, src = "kobe_w_labels.jpg"),
-                                     actionButton(inputId = "clicks",
-                                                  label = "See species and catch (%)", data = "table_percent")),
-                            tabPanel("Projection", 
-                                     plotOutput("projection",
-                                                width = "100%"))
-                            
-                            )#tabsetPanel
-                          
-                          )#mainPanel   
+  mainPanel( 
+    tabsetPanel(
+      type = "tab",
+      
+##projection tab panel 
+
+    tabPanel("Projection",
+
+    p(br(strong("BIOMASS - Conservation")),
+        br("We show total biomass in the Midriff Islands region from 2015 to 2065. Each colored line represents a different marine size scenario."),
+        br(strong("CATCH - Food")),
+        br("Catch for the 13 main fisheries from 2015 to 2065. Each colored line represents a different marine size scenario."),
+        br(strong("PROFIT - Livelihoods")),
+        br("Profits are calculated based on 2018 market prices with a 10% discount rate (the rate used by the Mexican government). We project profits from 2015 to 2065. Each colored line represents a different marine size scenario.")), #p               
+               
+    plotOutput("projection")
+    ), #tab panel
+      
+##current status tab panel      
+      tabPanel("Current Status",
+          h4("This is the current status of the 13 main fisheries in the                                  Midriff Islands (2019)."), 
+          h6("The quadrants of this KOBE plot show species status as follows: Species that fall in the red quadrant are overfished and continue to experience overfishing. Species in the yellow quadrant are overfished. The orange quadrant corresponds to species that are currently experiencing overfishing, and the green quadrant corresponds to species that are in good health."), #h6
+               
+  img(height = 300, width =480, src = "kobe_w_labels.jpg"),
+  
+  plotOutput("gif_table")
+        
+              ) #current status tab panel
+      
+            ) #tabsetPanel
+      
+        )#mainPanel   
                         
-             )#sidebarlayout
-                        ), #tab2
+      )#sidebarlayout
+    
+    ), #tab2
              
+###tab3
              
-             ###tab3
-             
-             tabPanel(title = "Explore the Fisheries",
-                      sidebarLayout(
-                        sidebarPanel(
-                          selectInput("fishery", "Explore the Fisheries",
+  tabPanel(title = "Explore the Fisheries",
+                sidebarLayout(
+                sidebarPanel(
+                selectInput("fishery", "Explore the Fisheries",
                                       c("Clam" = "mollusk",
                                         "Crab" = "crab",
                                         "Graysby" = "graysby",
@@ -132,46 +130,49 @@ ui <- fluidPage(
                           
                         ), #sidebarPanel 
                         
-                        mainPanel(
-                          tabsetPanel(
-                            type = "tab",
-                            tabPanel("Species", 
-                                     plotOutput("pic_spp"))
-                          ) #tabsetPanel
+    mainPanel(
+        tabsetPanel(
+            type = "tab",
+            tabPanel("Species", 
+            plotOutput("pic_spp"))
+              
+            ) #tabsetPanel
                           
-                        ) #mainPanel     
+        ) #mainPanel     
                         
-                        
-                      ) #sidebarLayout
-                      
-                      
-             )#tab3  
+      ) #sidebarLayout
+        
+    )#tab3  
+   
+  )#navbarpage
+
+) #fluidPage
              
-             
-                      )#main ui close token              
-  
-  )#fluidPage                    
 
 
 # Define server logic required to call images of outputs from www folder
 
 server <- function(input, output, session) {
-  ###output table with species and catch %
+  
+###output table with species and catch %
   
   #observeEvent(input$clicks, {renderImage({
+    
     #table_percent.png <- normalizePath(file.path('www/',
-    #paste(input$clicks,
-   # '.png',
-    #sep=' ')))}, deleteFile = FALSE)})
-  #list(src = table_percent.png,
-       #alt = paste("Table of species", input$clicks))
-  
-  #####outputs for projections using radio buttons 
+                                        #paste(input$clicks,
+                                        #'.png',
+                                         # sep='')))
+    #(src = table_percent.png,
+        #alt = paste("Table of species", input$clicks))
+    
+   # }, deleteFile = FALSE)}) #observe Events
+
+#####outputs for projections using radio buttons 
   
   output$projection <- renderImage({
     # When input$n is 3, filename is ./images/image3.jpeg
     
-    ##biomass projection
+##biomass projection
     biomass.png <- normalizePath(file.path('www/',
                                            paste(input$options, 
                                                  '.png', 
@@ -183,7 +184,7 @@ server <- function(input, output, session) {
          height = 400, 
          width = 500)
     
-    ##catch projection
+##catch projection
     
     catch.png <- normalizePath(file.path('www/',
                                          paste(input$options, 
@@ -206,32 +207,39 @@ server <- function(input, output, session) {
   }#renderImage
   , deleteFile = FALSE) #renderImage
   
+#####outputs for buttons 2
   
-  #####output for checkbox
+    output$gif_table <- renderImage({
+    # When input$n is 3, filename is ./images/image3.jpeg
+    
+##gif showing cost of no action
+      
+    kobe_no0.3.gif <- normalizePath(file.path('www/',
+                                           paste(input$table, 
+                                                 '.gif', 
+                                                 sep=''))) #normalizepath
+    
+    # Return a list containing the filename and alt text
+    list(src = kobe_no0.3.gif, 
+         alt = paste("animation of KOBE plot showing how fisheries 
+                     will change in absence of marine reserves", input$options))#list
+    
+##table showing spp contribution to percent total catch
+    
+    table_percent.png <- normalizePath(file.path('www/',
+                                         paste(input$table, 
+                                               '.png', 
+                                               sep=''))) #normalizepath
+    
+    list(src = table_percent.png,
+         alt = paste("animated KOBE plot showing spp 
+                     contribution to percent total catch", input$table))
+    
+    }#renderImage
+    , deleteFile = FALSE) #renderImage
   
-  #      x <- reactive(input$checkbox)
-  #    if (x = TRUE) 
-  #    {y <- output$no_action}
-  #    else
-  #    {y <- 0}
   
-  #   output$no_action <-  renderImage({
-  
-  #      kobe_no0.3.gif <- normalizePath(file.path('www/',
-  #                                             paste(input$checkbox, 
-  #                                                '.gif', 
-  #                                               sep=''))) #normalizepath
-  
-  #Return a list containing the filename and alt text
-  #  list(src = kobe_no0.3.gif,
-  #      alt = paste("kobe plot showing cost of no action", input$checkbox)) 
-  
-  
-  #    }#renderImage
-  #     , deleteFile = FALSE) #renderImage
-  
-  
-  #######outputs for fisheries
+#######outputs for fisheries
   
   output$pic_spp <- renderImage({
     # When input$n is 3, filename is ./images/image3.jpeg
