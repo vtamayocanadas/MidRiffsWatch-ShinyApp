@@ -9,6 +9,7 @@
 
 library(shiny)
 library(giphyr)
+library(shinythemes)
 #library(tidyverse)
 #library(ggplot2)
 #library(here)
@@ -23,15 +24,15 @@ library(giphyr)
 
 #height = 300, width =500, src = "logo-cobi-hd.png"
 
-
-
 ui <- fluidPage(
+  theme = shinytheme("cerulean"),
   
   navbarPage(title = "Midriff's Watch Tool",
              
              ###tab1                                 
              tabPanel(title = "Background", 
                       tags$h2("Welcome to the Midriff Islands, Mexico!"),
+                      h6("The map show in yellow the network of marine reserves designed in 2015"),
                       img(src = ("ocean_basemap.png")), #insert logo    
                       
                       tags$h3("Did you know how important this region is for Mexico?"),
@@ -55,13 +56,13 @@ ui <- fluidPage(
                       h3("Select Biomass (Conservation), Catch (Food) or Profits (Livelihoods) and compare the projections made with different marine reserve scenarios."), 
                       p("There are four Marine Reserve size scenarios: Business as Usual (BAU)= 0%, 5%, 20%, and 40% of the Midriff 
                         Islands region in the Gulf of California (study area).",
-                        br(strong("BIOMASS")),
+                        br(strong("BIOMASS - Conservation")),
                         br("We show total biomass in the Midriff Islands region from 2015 to 2065. 
                         Different lines correspond to different marine size scenarios."),
-                        br(strong("CATCH")),
+                        br(strong("CATCH - Food")),
                         br("Considering 13 main fisheries in the region we show catch from 2015 to 2065. 
                         Different lines correspond to different marine reserves scenarios."),
-                        br(strong("PROFIT")),
+                        br(strong("PROFIT - Livelihoods")),
                         br("Profits are calculated based on 2018 market prices and have been discounted with 
                         10% rate since that is the rate the Mexican government uses for their projects. 
                         We project profits from 2015 to 2065. Different lines correspond to different marine 
@@ -91,12 +92,12 @@ ui <- fluidPage(
                                      and continue to experience overfishing, species in the yellow quadrant are overfished. 
                                      Orange quadrant correspond to species that are currently experiencing overfishing, 
                                         and green quadrant correspond to species that are in  good health."),
-                                     img(height = 300, width =480, src = "kobe_w_labels.jpg")),
+                                     img(height = 300, width =480, src = "kobe_w_labels.jpg"),
+                                     actionButton(inputId = "clicks",
+                                                  label = "See species and catch (%)", data = "table_percent")),
                             tabPanel("Projection", 
                                      plotOutput("projection",
-                                                width = "100%")),
-                            tabPanel("Cost of No Action", 
-                                     plotOutput("no_action"))
+                                                width = "100%"))
                             
                             )#tabsetPanel
                           
@@ -155,6 +156,15 @@ ui <- fluidPage(
 # Define server logic required to call images of outputs from www folder
 
 server <- function(input, output, session) {
+  ###output table with species and catch %
+  
+  #observeEvent(input$clicks, {renderImage({
+    #table_percent.png <- normalizePath(file.path('www/',
+    #paste(input$clicks,
+   # '.png',
+    #sep=' ')))}, deleteFile = FALSE)})
+  #list(src = table_percent.png,
+       #alt = paste("Table of species", input$clicks))
   
   #####outputs for projections using radio buttons 
   
