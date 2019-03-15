@@ -63,11 +63,7 @@ sidebarLayout(
           radioButtons(inputId = "options", label = "Projections",
                                        c("Biomass (MT)" = "biomass",
                                          "Catch (MT)" = "catch",
-                                         "Profit (USD)" = "profit")), #radio buttons
-          
-          radioButtons(inputId = "table", label = "Current Status",
-                       c("Cost of No Action" = "kobe_no0.3",
-                         "Species Contribution to Total Catch" = "table_percent")) #radio buttons2
+                                         "Profit (USD)" = "profit")) #radio buttons
 ##action button                          
         #actionButton(inputId = "clicks",
         #                 label = "See species and catch (%)", 
@@ -98,9 +94,7 @@ sidebarLayout(
           h4("This is the current status of the 13 main fisheries in the                                  Midriff Islands (2019)."), 
           h6("The quadrants of this KOBE plot show species status as follows: Species in the red quadrant have experienced historical overfishing and are currently overfished. Species in the yellow quadrant have been historically overfished. Species in the orange quadrant are currently experiencing overfishing, and species in the green quadrant are in good health."), #h6
                
-  img(height = 300, width =480, src = "kobe_w_labels.jpg"),
-  
-  plotOutput("gif_table")
+  img(height = 300, width =480, src = "kobe_w_labels.jpg")
         
               ) #current status tab panel
       
@@ -154,25 +148,20 @@ sidebarLayout(
 ###tab4    
         
 tabPanel(title = "Our Model", 
-         h3("Model"),
-         p("We used a catch-only algorithm to get fisheries reference points. Those results 
-         were used as the inputs for a dynamic Schaefer surplus production model (Equation 1). 
-         The project area was represented by a matrix of 11,236 patches, each with an area of 1km2. 
-         Time steps are annual. The area-perimeter ratio for the 5% reserve network size was maintained 
-         for the proposed 5% marine reserve network size. For 20% and 40% scenarios, the ratio was not 
-         maintained, but randomly generated using a sample function in RStudio. The model simulates biomass, 
-         catches, and fishing exploitation rate inside and outside the marine reserve in every patch at every time step.",
+         h3("Fisheries Model"),
+         p("A catch-only algorithm was used to get fisheries reference points. Those results 
+         were used as the inputs for a dynamic Schaefer surplus production model (Equation 1). The project area was divided into a matrix of 11,236 patches, each with an area of 1km2. Time steps were annual. The area-perimeter ratio for the 5% reserve network size was maintained 
+for the proposed 5% marine reserve network size. For 20% and 40% scenarios, the ratio was not 
+maintained, but randomly generated using a sample function in RStudio. The model simulates biomass, catch, and fishing exploitation rate inside and outside the marine reserve in every patch at every time step.",
          br(),
-         br("Equation 1:     Bij, t+1 =Bij, t+Bij, t r(1-(Bij, t/Kij)- Fij, t Bij, t+Iij, t-mBij, t"),
+         br("Equation 1: Bij, t+1 =Bij, t+Bij, t r(1-(Bij, t/Kij)- Fij, t Bij, t+Iij, t-mBij, t"),
          h6("The matrix model (patchij, row i, column j) represents the project area. Where fishing exploitation rate (F) is equal to Fij,t> 0 if a patch is outside the reserve network, and equal to 0 if a patch is inside the network. Biomass (Bij,t) is the biomass of fish species in each patch in time period t; in t=1 Bij,1=B1/total patches. Logistic growth in each patch is represented by parameters r and K, where Kij=K/total patches. Immigration (I) is modeled using Von Neumann neighborhood movement and a parameterized migration rate (m) for each fishery based on home range estimates (Das, 2011). 
                        5%, 20%, and 40% of the Midriff Islands region in the Gulf of California (study area)."), 
          h3("Economic Model"),
          p("Profits to be made are a function of Bt and Ft (adopted from Costello et al., 2016) (Equation 2):"),
          br(),
-         br("Equation 2:     t= pHt - cFt"),
-         br("Where p is the ex vessel price of fish, Ht=FtBtis harvest, c is a cost parameter, and F is the fishing 
-         exploitation rate.  𝛽 is held constant at 1 as a scalar cost parameter that determines a linear relationship
-         between units of effort added to the fishery and associated cost.")),
+         br("Equation 2: t= pHt - cFt"),
+         h6("Where p is the ex vessel price of fish, Ht=FtBtis harvest, c is a cost parameter, and F is the fishing exploitation rate.  𝛽 is held constant at 1 as a scalar cost parameter that determines a linear relationship between units of effort added to the fishery and associated cost.")),
          #text description
          
          sidebarLayout(
@@ -182,15 +171,9 @@ tabPanel(title = "Our Model",
                           c("Model Parameters" = "parameters",
                             "Species Contribution to Total Catch" = "table_percent")) #radio buttons2
            ), #sidebar panel
-           mainPanel( 
-             tabsetPanel(
-               type = "tab",
-               tabPanel("Model", 
-                        plotOutput("two_tables"))
-               
-             ) #tabsetPanel
-             
-           ), #mainPanel 
+           mainPanel(
+                plotOutput("two_tables")
+                )#mainPanel
            
            )#sidebarlayout
            
@@ -276,7 +259,7 @@ server <- function(input, output, session) {
   }#renderImage
   , deleteFile = FALSE) #renderImage
   
-#####outputs for buttons 2
+#####outputs for buttons 2 in model tab
   
     output$two_tables <- renderImage({
     # When input$n is 3, filename is ./images/image3.jpeg
