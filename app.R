@@ -40,12 +40,13 @@ ui <- fluidPage(theme = shinytheme("cerulean"),
               br("The Midriff's Watch Tool is designed to visualize the current and future                          status of the most important small scale fisheries in the Midriff                             Islands under different marine reserve scenarios."),
               br("We show two worlds: 1) Business as Usual BAU (no marine protection), and 2)                       Marine Reserves implemented."),
               br("To explore, Choose to explore Biomass (MT), Catch (MT) and Profits (Millions of dollars) for the most important 13 fisheries in the region. These fisheries account for                        approximately 90% of all landings!"),                          
-             br("This project was developed by the Midriif's Watch Team in collaboration with Community and Biodiversity (COBI), which is a Mexican civil society organization."),
+             br("You can also learn about the model we used, learn more about the fisheries and the parameters used in the model, and get to know our team."),
+              br("This project was developed by the Midriif's Watch Team in collaboration with Community and Biodiversity (COBI), which is a Mexican civil society organization."),
              br("COBI was interested in quantifying the consequences of delayed management actions in the Midriffs Islands. With COBI as their client, the Midriff Watch Team worked from April 2018 to May 2019 to analyze the consequences of delaying management actions in the region (they proposed a marine reserve network in 2015 that was never implemented by the government)."),
              br("Data from this project was provided by the federal government of Mexico (CONAPESCA), and filtered by Midriff region landing sites from 2000-2015.")
 
  ),#p
- img(src = "cobi_logo.png", height = 30, width = 90),
+ h5("Click to watch COBI video"), img(src = "cobi_logo.png", height = 30, width = 90),
  plotOutput("video")
               ), #tab1
 
@@ -150,7 +151,53 @@ sidebarLayout(
         
     ),#tab3  
    
-###tab4        
+###tab4    
+        
+tabPanel(title = "Our Model", 
+         h3("Model"),
+         p("We used a catch-only algorithm to get fisheries reference points. Those results 
+         were used as the inputs for a dynamic Schaefer surplus production model (Equation 1). 
+         The project area was represented by a matrix of 11,236 patches, each with an area of 1km2. 
+         Time steps are annual. The area-perimeter ratio for the 5% reserve network size was maintained 
+         for the proposed 5% marine reserve network size. For 20% and 40% scenarios, the ratio was not 
+         maintained, but randomly generated using a sample function in RStudio. The model simulates biomass, 
+         catches, and fishing exploitation rate inside and outside the marine reserve in every patch at every time step.",
+         br(),
+         br("Equation 1:     Bij, t+1 =Bij, t+Bij, t r(1-(Bij, t/Kij)- Fij, t Bij, t+Iij, t-mBij, t"),
+         h6("The matrix model (patchij, row i, column j) represents the project area. Where fishing exploitation rate (F) is equal to Fij,t> 0 if a patch is outside the reserve network, and equal to 0 if a patch is inside the network. Biomass (Bij,t) is the biomass of fish species in each patch in time period t; in t=1 Bij,1=B1/total patches. Logistic growth in each patch is represented by parameters r and K, where Kij=K/total patches. Immigration (I) is modeled using Von Neumann neighborhood movement and a parameterized migration rate (m) for each fishery based on home range estimates (Das, 2011). 
+                       5%, 20%, and 40% of the Midriff Islands region in the Gulf of California (study area)."), 
+         h3("Economic Model"),
+         p("Profits to be made are a function of Bt and Ft (adopted from Costello et al., 2016) (Equation 2):"),
+         br(),
+         br("Equation 2:     t= pHt - cFt"),
+         br("Where p is the ex vessel price of fish, Ht=FtBtis harvest, c is a cost parameter, and F is the fishing 
+         exploitation rate.  𝛽 is held constant at 1 as a scalar cost parameter that determines a linear relationship
+         between units of effort added to the fishery and associated cost.")),
+         #text description
+         
+         sidebarLayout(
+           sidebarPanel(
+             #radiobuttons
+             radioButtons(inputId = "table", label = "Current Status and Parameters",
+                          c("Model Parameters" = "parameters",
+                            "Species Contribution to Total Catch" = "table_percent")) #radio buttons2
+           ), #sidebar panel
+           mainPanel( 
+             tabsetPanel(
+               type = "tab",
+               tabPanel("Model", 
+                        plotOutput("two_tables"))
+               
+             ) #tabsetPanel
+             
+           ), #mainPanel 
+           
+           )#sidebarlayout
+           
+           
+), #tab4
+               
+###tab 5
 tabPanel(title = "Meet the Team", 
          h4("The Midriff Watch Team is a group of Master's students from the Bren School of Environmental Science & Management - University of California Santa Barbara (UCSB) (Class of 2019)."),
          h5("The team:"),
@@ -161,29 +208,33 @@ tabPanel(title = "Meet the Team",
          br("Valeria Tamayo-Canadas - Project Manager"),
          br("Hunter Lenihan - Faculty Advisor"),
          br("Erin Winslow - PhD Advisor"),
+         br(),
          img(height = 250, width =350, src = "group_pic.jpg"),
          
          h5("Analysis was completed with the support of the Sustainable Fisheries Group - The Bren School, UCSB"),
          br("Tracy Mangin, Juan Carlos Villasenor, Chris Free"),
-         br("Christopher Costello - External Advisor"))
+         br("Christopher Costello - External Advisor")
+         
+         ) #tab5
 
   )#navbarpage
 
 ) #fluidPage
              
 
-
 # Define server logic required to call images of outputs from www folder
 
 server <- function(input, output, session) {
   
 ###output video
-  output$video <- renderUI({
-    if(is.null(data()))
-      h6("Intro COBI", br(), tags$link(src ='https://cobi.org.mx/en/', type="video/mp4", width = "400px", height = "350px", controls = "controls"))
-      return()
+  #output$video <- a("cobi video", href = "https://cobi.org.mx/en/")
+  #output$video <- renderUI({
+   # taglist("URL link")
+    #if(is.null(data()))
+     # h6("Intro COBI", br(), tags$link(src ='', type="video/mp4", width = "400px", height = "350px", controls = "controls"))
+     # return()
     
-  })
+  #})
   
 #####outputs for projections using radio buttons 
   
@@ -227,21 +278,21 @@ server <- function(input, output, session) {
   
 #####outputs for buttons 2
   
-    output$gif_table <- renderImage({
+    output$two_tables <- renderImage({
     # When input$n is 3, filename is ./images/image3.jpeg
     
 ##gif showing cost of no action
       
-    kobe_no0.3.gif <- normalizePath(file.path('www/',
-                                           paste(input$table, 
-                                                 '.gif', 
-                                                 sep=''))) #normalizepath
+    #kobe_no0.3.gif <- normalizePath(file.path('www/',
+                                          # paste(input$table, 
+                                                # '.gif', 
+                                                 #sep=''))) #normalizepath
     
     # Return a list containing the filename and alt text
-    list(src = kobe_no0.3.gif, 
-         contentType = 'image/gif',
-         alt = paste("animation of KOBE plot showing how fisheries 
-                     will change in absence of marine reserves", input$table))#list
+    #list(src = kobe_no0.3.gif, 
+       #  contentType = 'image/gif',
+        # alt = paste("animation of KOBE plot showing how fisheries 
+         #            will change in absence of marine reserves", input$table))#list
     
 ##table showing spp contribution to percent total catch
     
@@ -253,10 +304,19 @@ server <- function(input, output, session) {
     list(src = table_percent.png,
          alt = paste("table showing the percent contribution of each species to total catch", input$table))
     
+    parameters.png <- normalizePath(file.path('www/',
+                                              paste(input$table, 
+                                                    '.png', 
+                                                    sep=''))
+                                    ) #normalizepath
+    
+    list(src = parameters.png,
+         alt = paste("Parameters used in the model", input$table))
+    
     }#renderImage
     , deleteFile = FALSE) #renderImage
   
-  
+
 #######outputs for fisheries
   
   output$pic_spp <- renderImage({
@@ -396,12 +456,6 @@ server <- function(input, output, session) {
     
   }#renderImage
   , deleteFile = FALSE) #renderImage
-  
-  
-  
-  
-  
-  
   
 } #brace for entire server
 
