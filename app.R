@@ -36,11 +36,20 @@ ui <- fluidPage(theme = shinytheme("cerulean"),
               tags$h3("Do you know how important this region is for Mexico?"),
               p("The Gulf of California (GOC) generates over 50,000 
                       fishing jobs, which involves approximately 2,600 vessels. Of these, 2                         ,500 are small-scale fishers (Cisneros-Mata, 2010).The GOC is                                 characterized by high levels of primary productivity, biological                              diversity, and fish biomass. This provides local people with a wide                           array of economically and culturally important ecosystem                                      services, including fisheries.",
-              br("Well-documented policy failures and climate change threaten the provision of                       these services, including declines in fish stocks caught by many small                        -scale fisheries (Cinti A et al., 2014)."), 
+              br("Policy failures and climate change threaten the provision of                       these services, including declines in fish stocks caught by many small                        -scale fisheries (Cinti A et al., 2014)."), 
               br("The Midriff's Watch Tool is designed to visualize the current and future                          status of the most important small scale fisheries in the Midriff                             Islands under different marine reserve scenarios."),
               br("We show two worlds: 1) Business as Usual BAU (no marine protection), and 2)                       Marine Reserves implemented."),
-              br("To explore, Choose to explore Biomass (MT), Catch (MT) and Profits (Millions of dollars) for the most important 13 fisheries in the region. These fisheries account for                        approximately 90% of all landings!")                          
-              )#p
+              br("To explore, Choose to explore Biomass (MT), Catch (MT) and Profits (Millions of dollars) for the most important 13 fisheries in the region. These fisheries account for                        approximately 90% of all landings!"),                          
+             br("This project was developed by the Midriif's Watch Team, 2019 Master students at 
+             the Bren School of Environmental Science & Management - University of California Santa Barbara"),
+             br("Community and Biodiversity (COBI), a civil society organization, contacted Bren 
+             to quantify the consequences of delaying management actions in the Midriffs Islands."),
+             br("The analysis started using catch data from the federal mexican government (CONAPESCA) filtered by the 
+             region's landing sites from 2000-2015.")
+
+ ),#p
+ img(src = "cobi_logo.png", height = 50, width = 90),
+ plotOutput("video")
               ), #tab1
 
              
@@ -142,8 +151,28 @@ sidebarLayout(
                         
       ) #sidebarLayout
         
-    )#tab3  
+    ),#tab3  
    
+###tab4        
+tabPanel(title = "Meet the team", 
+         h4("The Midriff's Watch Team worked from April 2018 to May 2019 with COBI to analyze the consequences of delaying management actions in the region"),
+         h5("The team is composed by:"),
+         br("Juliette Verstaen - Communications and outreach manager"),
+         br("Vienna Saccomanno - Editor"),
+         br("Seleni Cruz - Data Manager"),
+         br("Edaysi Bucio - Financial Manager"),
+         br("Valeria Tamayo-Canadas - Project Manager"),
+         
+         br("Hunter Lenihan - Faculty Advisor"),
+         br("Erin Winslow - PhD Advisor"),
+         img(height = 250, width =350, src = "group_pic.jpg"),
+         
+         h5("The analysis was done with the support of the Sustainable Fisheries Group - Bren, UCSB"),
+         br("Tracy Mangin, Juan Carlos Villasenor, Chris Free"),
+         br("Christopher Costello - External Advisor"))
+
+         
+         
   )#navbarpage
 
 ) #fluidPage
@@ -154,19 +183,13 @@ sidebarLayout(
 
 server <- function(input, output, session) {
   
-###output table with species and catch %
-  
-  #observeEvent(input$clicks, {renderImage({
+###output video
+  output$video <- renderUI({
+    if(is.null(data()))
+      h6("Intro COBI", br(), tags$link(src ='https://cobi.org.mx/en/', type="video/mp4", width = "400px", height = "350px", controls = "controls"))
+      return()
     
-    #table_percent.png <- normalizePath(file.path('www/',
-                                        #paste(input$clicks,
-                                        #'.png',
-                                         # sep='')))
-    #(src = table_percent.png,
-        #alt = paste("Table of species", input$clicks))
-    
-   # }, deleteFile = FALSE)}) #observe Events
-
+  })
 #####outputs for projections using radio buttons 
   
   output$projection <- renderImage({
