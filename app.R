@@ -29,26 +29,23 @@ ui <- fluidPage(theme = shinytheme("cerulean"),
 ###tab1                                 
       tabPanel(title = "Background", 
               tags$h2("Welcome to the Midriff Islands, Mexico!"),
-              h6("Shown below in yellow is a network of marine 
-                       reserves designed in 2015"),
-              img(src = "ocean_basemap.png", height = 500, width = 400), #insert map   
+              img(src = "ocean_basemap.png", height = 500, width = 400),
+              h6("The above map shows the Midriff Islands region of the Gulf of California.                         Yellow polygons indicate a network of marine 
+                      reserves proposed by COBI in 2015."), #insert map   
                       
               tags$h3("Do you know how important this region is for Mexico?"),
               p("The Gulf of California (GOC) generates over 50,000 
                       fishing jobs, which involves approximately 2,600 vessels. Of these, 2                         ,500 are small-scale fishers (Cisneros-Mata, 2010).The GOC is                                 characterized by high levels of primary productivity, biological                              diversity, and fish biomass. This provides local people with a wide                           array of economically and culturally important ecosystem                                      services, including fisheries.",
-              br("Policy failures and climate change threaten the provision of                       these services, including declines in fish stocks caught by many small                        -scale fisheries (Cinti A et al., 2014)."), 
+              br("Policy failures and climate change threaten the provision of                       these services, including declines in fish stocks caught by many small             -scale fisheries (Cinti A et. al., 2014)."), 
               br("The Midriff's Watch Tool is designed to visualize the current and future                          status of the most important small scale fisheries in the Midriff                             Islands under different marine reserve scenarios."),
               br("We show two worlds: 1) Business as Usual BAU (no marine protection), and 2)                       Marine Reserves implemented."),
               br("To explore, Choose to explore Biomass (MT), Catch (MT) and Profits (Millions of dollars) for the most important 13 fisheries in the region. These fisheries account for                        approximately 90% of all landings!"),                          
-             br("This project was developed by the Midriif's Watch Team, 2019 Master students at 
-             the Bren School of Environmental Science & Management - University of California Santa Barbara"),
-             br("Community and Biodiversity (COBI), a civil society organization, contacted Bren 
-             to quantify the consequences of delaying management actions in the Midriffs Islands."),
-             br("The analysis started using catch data from the federal mexican government (CONAPESCA) filtered by the 
-             region's landing sites from 2000-2015.")
+             br("This project was developed by the Midriif's Watch Team in collaboration with Community and Biodiversity (COBI), which is a Mexican civil society organization."),
+             br("COBI was interested in quantifying the consequences of delayed management actions in the Midriffs Islands. With COBI as their client, the Midriff Watch Team worked from April 2018 to May 2019 to analyze the consequences of delaying management actions in the region (they proposed a marine reserve network in 2015 that was never implemented by the government)."),
+             br("Data from this project was provided by the federal government of Mexico (CONAPESCA), and filtered by Midriff region landing sites from 2000-2015.")
 
  ),#p
- img(src = "cobi_logo.png", height = 50, width = 90),
+ img(src = "cobi_logo.png", height = 30, width = 90),
  plotOutput("video")
               ), #tab1
 
@@ -62,12 +59,12 @@ ui <- fluidPage(theme = shinytheme("cerulean"),
 sidebarLayout(
         sidebarPanel(
           #radiobuttons  
-          radioButtons(inputId = "options", label = "See results in Projection Tab",
+          radioButtons(inputId = "options", label = "Projections",
                                        c("Biomass (MT)" = "biomass",
                                          "Catch (MT)" = "catch",
                                          "Profit (USD)" = "profit")), #radio buttons
           
-          radioButtons(inputId = "table", label = "See results in Current Status Tab",
+          radioButtons(inputId = "table", label = "Current Status",
                        c("Cost of No Action" = "kobe_no0.3",
                          "Species Contribution to Total Catch" = "table_percent")) #radio buttons2
 ##action button                          
@@ -83,14 +80,14 @@ sidebarLayout(
       
 ##projection tab panel 
 
-    tabPanel("Projection",
+    tabPanel("Projections",
 
     p(br(strong("BIOMASS - Conservation")),
-        br("We show total biomass in the Midriff Islands region from 2015 to 2065. Each colored line represents a different marine size scenario."),
+        br("This projection shows total biomass (MT) of the 13 focus species in the Midriff Islands region from 2015 to 2065. Each colored line represents a different marine size scenario."),
         br(strong("CATCH - Food")),
-        br("Catch for the 13 main fisheries from 2015 to 2065. Each colored line represents a different marine size scenario."),
+        br("Catch in metric tons (MT) for the 13 main fisheries from 2015 to 2065. Each colored line represents a different marine size scenario."),
         br(strong("PROFIT - Livelihoods")),
-        br("Profits are calculated based on 2018 market prices with a 10% discount rate (the rate used by the Mexican government). We project profits from 2015 to 2065. Each colored line represents a different marine size scenario.")), #p               
+        br("Profits are calculated in USD based on 2018 market prices with a 10% discount rate (the rate used by the Mexican government). Profits are projected from 2015 to 2065. Each colored line represents a different marine size scenario.")), #p               
                
     plotOutput("projection")
     ), #tab panel
@@ -98,7 +95,7 @@ sidebarLayout(
 ##current status tab panel      
       tabPanel("Current Status",
           h4("This is the current status of the 13 main fisheries in the                                  Midriff Islands (2019)."), 
-          h6("The quadrants of this KOBE plot show species status as follows: Species that fall in the red quadrant are overfished and continue to experience overfishing. Species in the yellow quadrant are overfished. The orange quadrant corresponds to species that are currently experiencing overfishing, and the green quadrant corresponds to species that are in good health."), #h6
+          h6("The quadrants of this KOBE plot show species status as follows: Species in the red quadrant have experienced historical overfishing and are currently overfished. Species in the yellow quadrant have been historically overfished. Species in the orange quadrant are currently experiencing overfishing, and species in the green quadrant are in good health."), #h6
                
   img(height = 300, width =480, src = "kobe_w_labels.jpg"),
   
@@ -154,25 +151,22 @@ sidebarLayout(
     ),#tab3  
    
 ###tab4        
-tabPanel(title = "Meet the team", 
-         h4("The Midriff's Watch Team worked from April 2018 to May 2019 with COBI to analyze the consequences of delaying management actions in the region"),
-         h5("The team is composed by:"),
+tabPanel(title = "Meet the Team", 
+         h4("The Midriff Watch Team is a group of Master's students from the Bren School of Environmental Science & Management - University of California Santa Barbara (UCSB) (Class of 2019)."),
+         h5("The team:"),
          br("Juliette Verstaen - Communications and outreach manager"),
          br("Vienna Saccomanno - Editor"),
          br("Seleni Cruz - Data Manager"),
          br("Edaysi Bucio - Financial Manager"),
          br("Valeria Tamayo-Canadas - Project Manager"),
-         
          br("Hunter Lenihan - Faculty Advisor"),
          br("Erin Winslow - PhD Advisor"),
          img(height = 250, width =350, src = "group_pic.jpg"),
          
-         h5("The analysis was done with the support of the Sustainable Fisheries Group - Bren, UCSB"),
+         h5("Analysis was completed with the support of the Sustainable Fisheries Group - The Bren School, UCSB"),
          br("Tracy Mangin, Juan Carlos Villasenor, Chris Free"),
          br("Christopher Costello - External Advisor"))
 
-         
-         
   )#navbarpage
 
 ) #fluidPage
@@ -190,6 +184,7 @@ server <- function(input, output, session) {
       return()
     
   })
+  
 #####outputs for projections using radio buttons 
   
   output$projection <- renderImage({
@@ -244,8 +239,9 @@ server <- function(input, output, session) {
     
     # Return a list containing the filename and alt text
     list(src = kobe_no0.3.gif, 
+         contentType = 'image/gif',
          alt = paste("animation of KOBE plot showing how fisheries 
-                     will change in absence of marine reserves", input$options))#list
+                     will change in absence of marine reserves", input$table))#list
     
 ##table showing spp contribution to percent total catch
     
@@ -255,8 +251,7 @@ server <- function(input, output, session) {
                                                sep=''))) #normalizepath
     
     list(src = table_percent.png,
-         alt = paste("animated KOBE plot showing spp 
-                     contribution to percent total catch", input$table))
+         alt = paste("table showing the percent contribution of each species to total catch", input$table))
     
     }#renderImage
     , deleteFile = FALSE) #renderImage
