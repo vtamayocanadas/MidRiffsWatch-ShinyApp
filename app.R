@@ -48,7 +48,7 @@ ui <- fluidPage(theme = shinytheme("cerulean"),
  ),#p
  #h5("Click to watch COBI video"), 
  img(src = "cobi_logo.png", height = 30, width = 90),
- img(src = "mrw_logo.png", height = 100, width = 90)
+ img(src = "mrw_logo.png", height = 120, width = 90)
  #plotOutput("video")
               ), #tab1
 
