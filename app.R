@@ -29,7 +29,7 @@ ui <- fluidPage(theme = shinytheme("cerulean"),
 ###tab1                                 
       tabPanel(title = "Background", 
               tags$h2("Welcome to the Midriff Islands, Mexico!"),
-              img(src = "ocean_basemap.png", height = 500, width = 400),
+              img(src = "ocean_basemap.png", height = 600, width = 500),
               h6("The above map shows the Midriff Islands region of the Gulf of California.                         Yellow polygons indicate a network of marine 
                       reserves proposed by COBI in 2015."), #insert map   
                       
@@ -46,8 +46,10 @@ ui <- fluidPage(theme = shinytheme("cerulean"),
              br("Data from this project was provided by the federal government of Mexico (CONAPESCA), and filtered by Midriff region landing sites from 2000-2015.")
 
  ),#p
- h5("Click to watch COBI video"), img(src = "cobi_logo.png", height = 30, width = 90),
- plotOutput("video")
+ #h5("Click to watch COBI video"), 
+ img(src = "cobi_logo.png", height = 30, width = 90),
+ img(src = "mrw_logo.png", height = 100, width = 90)
+ #plotOutput("video")
               ), #tab1
 
              
@@ -94,7 +96,9 @@ sidebarLayout(
           h4("This is the current status of the 13 main fisheries in the                                  Midriff Islands (2019)."), 
           h6("The quadrants of this KOBE plot show species status as follows: Species in the red quadrant have experienced historical overfishing and are currently overfished. Species in the yellow quadrant have been historically overfished. Species in the orange quadrant are currently experiencing overfishing, and species in the green quadrant are in good health."), #h6
                
-  img(height = 300, width =480, src = "kobe_w_labels.jpg")
+  img(height = 300, width =480, src = "kobe_w_labels.jpg"),
+  br(),
+  br()
         
               ) #current status tab panel
       
@@ -184,6 +188,7 @@ maintained, but randomly generated using a sample function in RStudio. The model
 tabPanel(title = "Meet the Team", 
          h4("The Midriff Watch Team is a group of Master's students from the Bren School of Environmental Science & Management - University of California Santa Barbara (UCSB) (Class of 2019)."),
          h5("The team:"),
+         img(src = "mrw_logo.png", height = 150, width = 100),
          br("Juliette Verstaen - Communications and outreach manager"),
          br("Vienna Saccomanno - Editor"),
          br("Seleni Cruz - Data Manager"),
@@ -196,7 +201,9 @@ tabPanel(title = "Meet the Team",
          
          h5("Analysis was completed with the support of the Sustainable Fisheries Group - The Bren School, UCSB"),
          br("Tracy Mangin, Juan Carlos Villasenor, Chris Free"),
-         br("Christopher Costello - External Advisor")
+         br("Christopher Costello - External Advisor"),
+         br(),
+         br()
          
          ) #tab5
 
